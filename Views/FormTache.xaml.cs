@@ -76,9 +76,9 @@ namespace Automate.Views
                 else
                 {
                     Title = "Supprimer un produit";
-                    txtName.IsEnabled = false;
+                    txtTitre.IsEnabled = false;
                     txtDescription.IsEnabled = false;
-                    dpDate.IsEnabled = false;
+                    dpDateDebut.IsEnabled = false;
                     cboType.IsEnabled = false;
                     cboStatus.IsEnabled = false;
                 }
