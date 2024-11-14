@@ -104,37 +104,68 @@ namespace Automate.ViewModels
         }
         private void AjouterTache()
         {
-            FormTache formTache = new FormTache();
-            if (formTache.ShowDialog() == true && formTache.Tache != null)
+
+            try
             {
-                _mongoService.AjouterTache(formTache.Tache);
-                ObservableCollectionDeTaches.Add(formTache.Tache);
+                
+                if(!estAdmin())
+                {
+                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
+                    return;
+                }
+                else {
+                    FormTache formTache = new FormTache();
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.AjouterTache(formTache.Tache);
+                        ObservableCollectionDeTaches.Add(formTache.Tache);
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été ajoutée.");
+                    }
+                }
+
+          
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("La tâche n'a pas été ajoutée.");
+                MessageBox.Show($"Erreur lors de la récupération des tâches : {ex.Message}");
             }
+
         }
 
         private void ModifierUneTache()
         {
             try
             {
-                if (TacheActuelle == null)
+                if (!estAdmin())
                 {
-                    MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
                     return;
-                }
-                FormTache formTache = new FormTache(TacheActuelle);
-                if (formTache.ShowDialog() == true && formTache.Tache != null)
-                {
-                    _mongoService.ModifierTache(formTache.Tache);
-                    ChargerTaches();
                 }
                 else
                 {
-                    MessageBox.Show("La tâche n'a pas été modifiée.");
+                    if (TacheActuelle == null)
+                    {
+                        MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+                        return;
+                    }
+                    FormTache formTache = new FormTache(TacheActuelle);
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.ModifierTache(formTache.Tache);
+                        ChargerTaches();
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été modifiée.");
+                    }
+
                 }
+
+
+         
 
             }
             catch (Exception ex)
@@ -164,6 +195,10 @@ namespace Automate.ViewModels
         {
             // Vérifie si l'utilisateur est connecté
             return UtilisateurConnecte != null;
+        }
+        private bool estAdmin()
+        {
+            return UtilisateurConnecte.Role == "admin";
         }
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
