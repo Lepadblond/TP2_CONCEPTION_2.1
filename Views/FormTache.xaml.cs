@@ -1,6 +1,6 @@
 ﻿using Automate.Models;
 using Automate.Utils;
-using Automate.Enum;  // Assure-toi d'utiliser cet espace de noms
+using Automate.Enum;
 using System;
 using System.ComponentModel;
 using System.Linq;
