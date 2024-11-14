@@ -1,0 +1,67 @@
+﻿<Window x:Class="Automate.Views.FormTache"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Automate.Views"
+        mc:Ignorable="d"
+        Title="FormTache" Height="500" Width="350">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="lblTitre" Grid.Row="1" Grid.Column="0" Text="Ajout d'une tâche" FontSize="20" FontWeight="bold" TextAlignment="Center" Grid.ColumnSpan="3" Margin="0,0,0,20" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Titre" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtTitre" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Description" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="txtDescription" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200" Height="120" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Date de départ" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <DatePicker x:Name="dpDateDebut" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Date de fin" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <DatePicker x:Name="dpDateFin" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Type" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="cboType" Grid.Row="4" Grid.Column="2" Width="200" HorizontalAlignment="Center" Margin="0, 0, 0, 10" SelectedValuePath="Value" DisplayMemberPath="Description" />
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Statut" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="cboStatus" Grid.Row="5" Grid.Column="2" Width="200" HorizontalAlignment="Center" Margin="0, 0, 0, 10" SelectedValuePath="Value" DisplayMemberPath="Description" />
+            </Grid>
+        </Grid>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="btnAjouterModifierSupprimer" Width="100" Height="30" Content="Ajouter" Margin="5" Click="btnAjouterModifierSupprimer_Click"/>
+            <Button x:Name="btnAnnuler" Width="100" Height="30" Content="Annuler" Margin="5" Click="btnAnnuler_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

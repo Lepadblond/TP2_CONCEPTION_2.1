@@ -11,7 +11,7 @@ namespace Automate.Views
         public AccueilWindow()
         {
             InitializeComponent();
-            DataContext = new AccueilViewModel(); // Corrected to set the DataContext to AccueilViewModel
+            DataContext = new AccueilViewModel();
         }
     }
 }
