@@ -1,4 +1,6 @@
-﻿using Automate.Models;
+﻿using Automate.Interfaces;
+using Automate.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Automate.Utils
 {
-    public class MongoDBService
+    public class MongoDBService : IMongoDBService
     {
         private readonly IMongoDatabase _database;
         private readonly IMongoCollection<UserModel> _users;
@@ -32,10 +34,16 @@ namespace Automate.Utils
             return user;
         }
 
-        public List<TacheModel> ObtenirToutLesTaches()
+        public List<TacheModel> ObtenirToutesLesTaches()
         {
             var taches = _taches.Find(t => true).ToList();
             return taches;
+        }
+
+        public TacheModel ObtenirTacheParId(ObjectId id)
+        {
+            var tache = _taches.Find(t => t.Id == id).FirstOrDefault();
+            return tache;
         }
 
         public void AjouterTache(TacheModel tache)
@@ -43,9 +51,25 @@ namespace Automate.Utils
             _taches.InsertOne(tache);
         }
 
-        public void ModifierTache(TacheModel tache)
+        public void ModifierTache(ObjectId id, TacheModel tacheModifiee)
         {
-            _taches.ReplaceOne(t => t.Id == tache.Id, tache);
+            var updateDefinition = Builders<TacheModel>.Update
+                .Set(t => t.IdEmployeAffecte, tacheModifiee.IdEmployeAffecte)
+                .Set(t => t.Titre, tacheModifiee.Titre)
+                .Set(t => t.Description, tacheModifiee.Description)
+                .Set(t => t.Type, tacheModifiee.Type)
+                .Set(t => t.Status, tacheModifiee.Status)
+                .Set(t => t.DateDebut, tacheModifiee.DateDebut)
+                .Set(t => t.DateFin, tacheModifiee.DateFin)
+                .Set(t => t.DateAjout, tacheModifiee.DateAjout)
+                .Set(t => t.DateDerniereModification, tacheModifiee.DateDerniereModification);
+
+            var result = _taches.UpdateOne(t => t.Id == id, updateDefinition);
+
+            if (result.MatchedCount == 0)
+            {
+                throw new Exception("Tâche non trouvée.");
+            }
         }
 
         public void SupprimerTache(TacheModel tache)

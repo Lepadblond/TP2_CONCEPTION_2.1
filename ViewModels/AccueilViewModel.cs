@@ -72,7 +72,7 @@ namespace Automate.ViewModels
         {
             try
             {
-                _taches = _mongoService.ObtenirToutLesTaches();
+                _taches = _mongoService.ObtenirToutesLesTaches();
                 if (_taches == null || _taches.Count == 0)
                 {
                     MessageBox.Show("Aucune tâche n'a été trouvée.");
