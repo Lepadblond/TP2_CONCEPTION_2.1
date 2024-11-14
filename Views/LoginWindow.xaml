@@ -14,7 +14,6 @@
         ui:WindowHelper.UseModernWindowStyle="True">
     <Window.Resources>
         <utils:BoolToColorConverter x:Key="BoolToColorConverter"/>
-
     </Window.Resources>
     <Grid>
         <StackPanel VerticalAlignment="Center">
@@ -23,20 +22,28 @@
                    Height="200" 
                    Margin="5" 
                    HorizontalAlignment="Center"/>
+            <Label Content="Nom d'utilisateur" 
+                   Margin="10,5,0,0" 
+                   FontSize="14" 
+                   HorizontalAlignment="Center"/>
             <TextBox x:Name="UsernameTextBox"
                      Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
                      Width="200" Height="30" 
-                     Margin="10"/>
+                     Margin="10,0,10,10"/>
+            <!-- Password Section -->
+            <Label Content="Mot de passe" 
+                   Margin="10,5,0,0" 
+                   FontSize="14" 
+                   HorizontalAlignment="Center"/>
             <Border BorderThickness="2.5"
                     CornerRadius="2"
                     BorderBrush="{Binding HasPasswordErrors, Converter={StaticResource BoolToColorConverter}}"
                     Width="201" Height="35" 
-                    Padding="0">
+                    Padding="0" Margin="10,0,10,10">
                 <PasswordBox x:Name="PasswordBox" 
                              PasswordChanged="PasswordBox_PasswordChanged" 
                              Margin="-1,-1,-1,-1"
-                             MaxLength="20"
-                             />
+                             MaxLength="20"/>
             </Border>
             <Button Content="Se connecter" 
                     Width="145" 

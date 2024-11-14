@@ -12,15 +12,16 @@ namespace Automate.Utils
     {
         private readonly IMongoDatabase _database;
         private readonly IMongoCollection<UserModel> _users;
-
+        private readonly IMongoCollection<TacheModel> _taches;
         public MongoDBService(string databaseName)
         {
             var client = new MongoClient("mongodb://localhost:27017"); // URL du serveur MongoDB
             _database = client.GetDatabase(databaseName);
             _users = _database.GetCollection<UserModel>("Users");
+            _taches = _database.GetCollection<TacheModel>("Taches");
         }
 
-        public IMongoCollection<T> GetCollection<T>(string collectionName) 
+        public IMongoCollection<T> GetCollection<T>(string collectionName)
         {
             return _database.GetCollection<T>(collectionName);
         }
@@ -30,10 +31,35 @@ namespace Automate.Utils
             var user = _users.Find(u => u.Username == username && u.Password == password).FirstOrDefault();
             return user;
         }
-        public void RegisterUser(UserModel user)
+
+        public List<TacheModel> ObtenirToutLesTaches()
         {
-            _users.InsertOne(user);
+            var taches = _taches.Find(t => true).ToList();
+            return taches;
         }
+
+        public void AjouterTache(TacheModel tache)
+        {
+            _taches.InsertOne(tache);
+        }
+
+        public void ModifierTache(TacheModel tache)
+        {
+            _taches.ReplaceOne(t => t.Id == tache.Id, tache);
+        }
+
+        public void SupprimerTache(TacheModel tache)
+        {
+            _taches.DeleteOne(t => t.Id == tache.Id);
+        }
+        public List<TacheModel> FiltrerTachesParDate(DateTime dateSelectionnee)
+        {
+            var filtre = Builders<TacheModel>.Filter.Eq(t => t.DateDebut, dateSelectionnee);
+            var tachesFiltrees = _taches.Find(filtre).ToList();
+            return tachesFiltrees;
+        }
+
+
 
     }
 

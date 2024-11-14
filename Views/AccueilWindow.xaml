@@ -3,10 +3,62 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Automate.Views"
+        xmlns:local="clr-namespace:Automate.Views" 
         mc:Ignorable="d"
-        Title="AccueilWindow" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:viewmodels="clr-namespace:Automate.ViewModels" 
+        WindowState="Maximized"
+        Title="AccueilWindow" Height="900" Width="800">
+    <Window.DataContext>
+        <viewmodels:AccueilViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ListBox pour afficher la liste des tâches -->
+        <ListBox Grid.Column="0" x:Name="lstTaches" VerticalAlignment="Stretch" Margin="5" 
+                 ItemsSource="{Binding ObservableCollectionDeTaches}" 
+                 SelectedItem="{Binding TacheActuelle, Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Titre}" FontWeight="Bold" FontSize="14" Margin="5"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- StackPanel pour afficher les détails de la tâche sélectionnée -->
+        <StackPanel Grid.Column="0" Grid.Row="1" DataContext="{Binding TacheActuelle}" Margin="10">
+            <TextBlock Text="Détails de la tâche" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+            <TextBlock Text="Titre:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Titre}" IsReadOnly="True" Margin="0,0,0,10"/>
+            <TextBlock Text="Description:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Description}" IsReadOnly="True" Margin="0,0,0,10"/>
+            <TextBlock Text="Type:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Type}" IsReadOnly="True" Margin="0,0,0,10"/>
+            <TextBlock Text="Statut:" FontWeight="Bold"/>
+            <TextBox Text="{Binding Status}" IsReadOnly="True" Margin="0,0,0,10"/>
+            <TextBlock Text="Date de début:" FontWeight="Bold"/>
+            <TextBox Text="{Binding DateDebut}" IsReadOnly="True" Margin="0,0,0,10"/>
+            <TextBlock Text="Date de fin:" FontWeight="Bold"/>
+            <TextBox Text="{Binding DateFin}" IsReadOnly="True" Margin="0,0,0,10"/>
+        </StackPanel>
+
+        <!-- Contrôle Calendar -->
+        <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10">
+            <Calendar Name="MonCalendrier" HorizontalAlignment="Center"
+              SelectedDate="{Binding DateSelectionnee, Mode=TwoWay}"/>
+        </StackPanel>
+
+        <!-- Formulaire pour ajouter et modifier une tâche -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Height="502" VerticalAlignment="Top">
+            <Button Content="Ajouter une tâche" Width="150" Command="{Binding AjouterTacheCommand}"/>
+        </StackPanel>
     </Grid>
 </Window>
