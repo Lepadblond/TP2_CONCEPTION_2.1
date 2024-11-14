@@ -16,6 +16,7 @@ namespace Automate.Utils
             window.Show();
         }
 
+
         // Méthode pour fermer la vue actuelle
         public void Close(Window window)
         {

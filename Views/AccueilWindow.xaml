@@ -8,9 +8,7 @@
         xmlns:viewmodels="clr-namespace:Automate.ViewModels" 
         WindowState="Maximized"
         Title="AccueilWindow" Height="900" Width="800">
-    <Window.DataContext>
-        <viewmodels:AccueilViewModel/>
-    </Window.DataContext>
+    
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -59,6 +57,8 @@
         <!-- Formulaire pour ajouter et modifier une tâche -->
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0" Height="502" VerticalAlignment="Top">
             <Button Content="Ajouter une tâche" Width="150" Command="{Binding AjouterTacheCommand}"/>
+            <Button Content="Modifier une tâche" Width="150" Command="{Binding ModifierUneTacheCommand}"/>
+            <Button Content="Supprimer une tâche" Width="150" Command="{Binding SupprimerTacheCommand}"/>
         </StackPanel>
     </Grid>
 </Window>
