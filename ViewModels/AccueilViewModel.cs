@@ -18,10 +18,11 @@ namespace Automate.ViewModels
         private ObservableCollection<TacheModel> _observableCollectionDeTaches;
         private TacheModel _tacheActuelle;
         private DateTime? _dateSelectionnee;
+        private UserModel _utilisateurConnecte;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public AccueilViewModel()
+        public AccueilViewModel(UserModel utilisateurConnecte)
         {
             {
                 _mongoService = new MongoDBService("AutomateDB");
@@ -29,7 +30,10 @@ namespace Automate.ViewModels
                 _observableCollectionDeTaches = new ObservableCollection<TacheModel>();
                 ChargerTaches();
                 // Initialisation des commandes
+                UtilisateurConnecte = utilisateurConnecte;
+
                 AjouterTacheCommand = new RelayCommand(param => AjouterTache());
+                ModifierUneTacheCommand = new RelayCommand(param => ModifierUneTache());
             }
         }
         // Propriétés
@@ -39,6 +43,16 @@ namespace Automate.ViewModels
             set
             {
                 _observableCollectionDeTaches = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public UserModel UtilisateurConnecte
+        {
+            get => _utilisateurConnecte;
+            set
+            {
+                _utilisateurConnecte = value;
                 OnPropertyChanged();
             }
         }
@@ -66,6 +80,7 @@ namespace Automate.ViewModels
 
         // Commandes
         public ICommand AjouterTacheCommand { get; }
+        public ICommand ModifierUneTacheCommand { get; }
 
         // Méthodes
         private void ChargerTaches()
@@ -101,6 +116,37 @@ namespace Automate.ViewModels
             }
         }
 
+        private void ModifierUneTache()
+        {
+            try
+            {
+                if (TacheActuelle == null)
+                {
+                    MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+                    return;
+                }
+                FormTache formTache = new FormTache(TacheActuelle);
+                if (formTache.ShowDialog() == true && formTache.Tache != null)
+                {
+                    _mongoService.ModifierTache(formTache.Tache);
+                    ChargerTaches();
+                }
+                else
+                {
+                    MessageBox.Show("La tâche n'a pas été modifiée.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
+
+            }
+
+
+
+        }
+
         private void FiltrerTachesParDate()
         {
             if (DateSelectionnee.HasValue)
@@ -114,6 +160,11 @@ namespace Automate.ViewModels
             }
         }
 
+        private bool IsUserAuthenticated()
+        {
+            // Vérifie si l'utilisateur est connecté
+            return UtilisateurConnecte != null;
+        }
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

@@ -1,4 +1,5 @@
-﻿using Automate.Utils;
+﻿using Automate.Models;
+using Automate.Utils;
 using Automate.Views;
 using System;
 using System.Collections;
@@ -94,6 +95,7 @@ namespace Automate.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        // ...
 
         public void Authenticate()
         {
@@ -102,7 +104,7 @@ namespace Automate.ViewModels
 
             if (!HasErrors)
             {
-                var user = _mongoService.Authenticate(Username, Password);
+                UserModel user = _mongoService.Authenticate(Username, Password);
                 if (user == null)
                 {
                     AddError("Username", "Nom d'utilisateur ou mot de passe invalide");
@@ -111,11 +113,18 @@ namespace Automate.ViewModels
                 }
                 else
                 {
-                    _navigationService.NavigateTo<AccueilWindow>();
-                    _navigationService.Close(_window);
-                    Trace.WriteLine("logged in");
-                }
+                    // Crée l'instance d'AccueilViewModel avec le UserModel
+                    var accueilViewModel = new AccueilViewModel(user);
 
+                    // Crée l'instance de WindowAccueil avec le ViewModel
+                    var windowAccueil = new AccueilWindow(user);
+                
+
+                    // Affiche la nouvelle fenêtre et ferme la fenêtre actuelle
+                    windowAccueil.Show();
+                    _window.Close();
+                        Trace.WriteLine("logged in");
+                }
             }
         }
 

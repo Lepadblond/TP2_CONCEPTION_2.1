@@ -1,4 +1,5 @@
-﻿using Automate.ViewModels;
+﻿using Automate.Models;
+using Automate.ViewModels;
 using System.Windows;
 
 namespace Automate.Views
@@ -8,10 +9,12 @@ namespace Automate.Views
     /// </summary>
     public partial class AccueilWindow : Window
     {
-        public AccueilWindow()
+        public AccueilWindow(UserModel utilisateurConnecte)
         {
+
             InitializeComponent();
-            DataContext = new AccueilViewModel();
+
+            DataContext = new AccueilViewModel(utilisateurConnecte);
         }
     }
 }
