@@ -35,6 +35,7 @@ namespace Automate.ViewModels
 
                 AjouterTacheCommand = new RelayCommand(param => AjouterTache());
                 ModifierUneTacheCommand = new RelayCommand(param => ModifierUneTache());
+                SupprimerTacheCommand = new RelayCommand(param => SupprimerUneTache());
             }
         }
         // Propriétés
@@ -82,6 +83,7 @@ namespace Automate.ViewModels
         // Commandes
         public ICommand AjouterTacheCommand { get; }
         public ICommand ModifierUneTacheCommand { get; }
+        public ICommand SupprimerTacheCommand { get; }
 
         // Méthodes
         private void ChargerTaches()
@@ -145,7 +147,7 @@ namespace Automate.ViewModels
             {
                 if (!estAdmin())
                 {
-                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
+                    MessageBox.Show("Vous n'avez pas les droits pour modifier une tâche.");
                     return;
                 }
                 else
@@ -175,6 +177,41 @@ namespace Automate.ViewModels
             }
         }
 
+        private void SupprimerUneTache()
+        {
+            try
+            {
+                if (!estAdmin())
+                {
+                    MessageBox.Show("Vous n'avez pas les droits pour supprimer une tâche.");
+                    return;
+                }
+                else
+                {
+                    if (TacheActuelle == null)
+                    {
+                        MessageBox.Show("Veuillez sélectionner une tâche à supprimer.");
+                        return;
+                    }
+                    FormTache formTache = new FormTache(TacheActuelle, EtatFormulaire.Supprimer);
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.SupprimerTache(formTache.Tache);
+                        ChargerTaches();
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été supprimée.");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la suppression de la tâches : {ex.Message}");
+
+            }
+        }
         private void FiltrerTachesParDate()
         {
             if (DateSelectionnee.HasValue)

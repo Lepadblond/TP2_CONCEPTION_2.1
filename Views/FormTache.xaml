@@ -41,27 +41,64 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Titre" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtTitre" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200" Text="{Binding Titre}"/>
+                <TextBox x:Name="txtTitre" 
+                         Grid.Row="0" Grid.Column="2" 
+                         HorizontalAlignment="Center" 
+                         Margin="0, 0, 0, 10" Width="200" 
+                         Text="{Binding Titre}" 
+                         IsReadOnly="{Binding TexteNonModifiable}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Description" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBox x:Name="txtDescription" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200" Height="120" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Text="{Binding Description}"/>
+                <TextBox x:Name="txtDescription" 
+                         Grid.Row="1" Grid.Column="2" 
+                         HorizontalAlignment="Center" 
+                         Margin="0, 0, 0, 10" 
+                         Width="200" Height="120" 
+                         AcceptsReturn="True" 
+                         VerticalScrollBarVisibility="Auto" 
+                         Text="{Binding Description}" 
+                         IsReadOnly="{Binding TexteNonModifiable}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Date de départ" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <DatePicker x:Name="dpDateDebut" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200" SelectedDate="{Binding DateDebut}"/>
+                <DatePicker x:Name="dpDateDebut" 
+                            Grid.Row="2" Grid.Column="2" 
+                            HorizontalAlignment="Center" 
+                            Margin="0, 0, 0, 10" 
+                            Width="200" 
+                            SelectedDate="{Binding DateDebut}" 
+                            IsEnabled="{Binding BoiteModifiable}" />
 
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Date de fin" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <DatePicker x:Name="dpDateFin" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" Margin="0, 0, 0, 10" Width="200" SelectedDate="{Binding DateFin}"/>
+                <DatePicker x:Name="dpDateFin" 
+                            Grid.Row="3" Grid.Column="2" 
+                            HorizontalAlignment="Center" 
+                            Margin="0, 0, 0, 10" 
+                            Width="200" 
+                            SelectedDate="{Binding DateFin}" 
+                            IsEnabled="{Binding BoiteModifiable}" />
 
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Type" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <ComboBox x:Name="cboType" Grid.Row="4" Grid.Column="2" Width="200" HorizontalAlignment="Center" Margin="0, 0, 0, 10"  ItemsSource="{Binding TaskTypes}" SelectedItem="{Binding Type}" />
+                <ComboBox x:Name="cboType" 
+                          Grid.Row="4" Grid.Column="2" Width="200" 
+                          HorizontalAlignment="Center" 
+                          Margin="0, 0, 0, 10"  
+                          ItemsSource="{Binding TaskTypes}" 
+                          SelectedItem="{Binding Type}" 
+                          IsEnabled="{Binding BoiteModifiable}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" Text="Statut" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <ComboBox x:Name="cboStatus" Grid.Row="5" Grid.Column="2" Width="200" HorizontalAlignment="Center" Margin="0, 0, 0, 10" ItemsSource="{Binding TaskStatuses}" SelectedItem="{Binding Status}" />
+                <ComboBox x:Name="cboStatus" 
+                          Grid.Row="5" Grid.Column="2" Width="200" 
+                          HorizontalAlignment="Center" 
+                          Margin="0, 0, 0, 10" 
+                          ItemsSource="{Binding TaskStatuses}" 
+                          SelectedItem="{Binding Status}" 
+                          IsEnabled="{Binding BoiteModifiable}"/>
             </Grid>
         </Grid>
 
         <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button x:Name="btnAjouterModifierSupprimer" Width="100" Height="30" Content="{Binding AjouterModifierSupprimerButtonText}" Margin="5" Command="{Binding AjouterModifierSupprimerCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+            <Button x:Name="btnAjouterModifierSupprimer" Width="100" Height="30" Content="{Binding AjouterModifierSupprimerButtonText}" Margin="5" Command="{Binding AjouterModifierSupprimerCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" IsEnabled="{Binding IsFieldsReadOnly}"/>
             <Button x:Name="btnAnnuler" Width="100" Height="30" Content="Annuler" Margin="5" Command="{Binding AnnulerCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
         </StackPanel>
     </Grid>

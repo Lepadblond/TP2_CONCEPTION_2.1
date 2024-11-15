@@ -22,6 +22,8 @@ namespace Automate.ViewModels
         private Enum.TaskStatus _status;
         private EtatFormulaire _etat;
         private TacheModel _tache;
+        private bool _texteNonModifiable;
+        private bool _boiteModifiable;
 
         public string Titre
         {
@@ -103,6 +105,32 @@ namespace Automate.ViewModels
             }
         }
 
+        public bool TexteNonModifiable
+        {
+            get { return _texteNonModifiable; }
+            set
+            {
+                if (_texteNonModifiable != value)
+                {
+                    _texteNonModifiable = value;
+                    OnPropertyChanged(nameof(TexteNonModifiable));
+                }
+            }
+        }
+
+        public bool BoiteModifiable
+        {
+            get { return _boiteModifiable; }
+            set
+            {
+                if (_boiteModifiable != value)
+                {
+                    _boiteModifiable = value;
+                    OnPropertyChanged(nameof(BoiteModifiable));
+                }
+            }
+        }
+
         public List<TaskType> TaskTypes { get; set; }
         public List<Enum.TaskStatus> TaskStatuses { get; set; }
 
@@ -135,6 +163,7 @@ namespace Automate.ViewModels
 
             if (Etat == EtatFormulaire.Ajouter)
             {
+                gererEtatChamps(Etat);
                 AjouterModifierSupprimerButtonText = "Ajouter";
                 TitreLabelText = "Ajouter une tâche";
 
@@ -155,11 +184,13 @@ namespace Automate.ViewModels
 
                 if (Etat == EtatFormulaire.Modifier)
                 {
+                    gererEtatChamps(Etat);
                     AjouterModifierSupprimerButtonText = "Modifier";
                     TitreLabelText = "Modifier une tâche";
                 }
                 else
                 {
+                    gererEtatChamps(Etat);
                     AjouterModifierSupprimerButtonText = "Supprimer";
                     TitreLabelText = "Supprimer une tâche";
                 }
@@ -169,15 +200,29 @@ namespace Automate.ViewModels
             OnPropertyChanged(nameof(TitreLabelText));
         }
 
+        private void gererEtatChamps(EtatFormulaire pEtat)
+        {
+            if (pEtat == EtatFormulaire.Supprimer)
+            {
+                TexteNonModifiable = true;
+                BoiteModifiable = false;
+            }
+            else
+            {
+                TexteNonModifiable = false;
+                BoiteModifiable = true;
+            }
+        }
+
         private void AjouterModifierSupprimer(object parameter)
         {
 
             if (Etat == EtatFormulaire.Ajouter)
             {
-                MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment ajouter la tâche?", "Ajout d'une tâche", MessageBoxButton.YesNo);
-                if (confirmation == MessageBoxResult.Yes)
+                if (ValiderTache(Etat))
                 {
-                    if (ValiderTache(Etat))
+                    MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment ajouter la tâche?", "Ajout d'une tâche", MessageBoxButton.YesNo);
+                    if (confirmation == MessageBoxResult.Yes)
                     {
                         try
                         {
@@ -213,11 +258,10 @@ namespace Automate.ViewModels
                 {
                     try
                     {
-                        MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment modifier la tâche?", "Modification d'une tâche", MessageBoxButton.YesNo);
-                        if (confirmation == MessageBoxResult.Yes)
+                        if (ValiderTache(Etat))
                         {
-
-                            if (ValiderTache(Etat))
+                            MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment modifier la tâche?", "Modification d'une tâche", MessageBoxButton.YesNo);
+                            if (confirmation == MessageBoxResult.Yes)
                             {
                                 Tache.Titre = Titre;
                                 Tache.Description = Description;
@@ -234,6 +278,14 @@ namespace Automate.ViewModels
                     catch (Exception)
                     {
                         throw;
+                    }
+                }
+                else
+                {
+                    MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment supprimer la tâche?", "Suppression d'une tâche", MessageBoxButton.YesNo);
+                    if (confirmation == MessageBoxResult.Yes)
+                    {
+                        FermerFenetre(parameter, true);
                     }
                 }
             }
