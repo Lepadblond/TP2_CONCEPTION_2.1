@@ -14,9 +14,9 @@ namespace Automate.Utils
             {
                 var red = new BrushConverter().ConvertFrom("#c50500") as SolidColorBrush;
 
-                return boolValue ? red : Brushes.Transparent; // Choisissez la couleur ici
+                return boolValue ? red : Brushes.Transparent; 
             }
-            return Brushes.Transparent; // Valeur par défaut
+            return Brushes.Transparent;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -14,6 +14,7 @@ namespace Automate.Utils
         private readonly IMongoDatabase _database;
         private readonly IMongoCollection<UserModel> _users;
         private readonly IMongoCollection<TacheModel> _taches;
+
         public MongoDBService(string databaseName)
         {
             var client = new MongoClient("mongodb://localhost:27017"); // URL du serveur MongoDB
@@ -22,16 +23,17 @@ namespace Automate.Utils
             _taches = _database.GetCollection<TacheModel>("Taches");
         }
 
-    public IMongoCollection<T> GetCollection<T>(string collectionName)
-    {
-        return _database.GetCollection<T>(collectionName);
-    }
+        public IMongoCollection<T> GetCollection<T>(string collectionName)
+        {
+            return _database.GetCollection<T>(collectionName);
+        }
 
         public UserModel Authenticate(string? username, string? password)
         {
             var user = _users.Find(u => u.Username == username && u.Password == password).FirstOrDefault();
             return user;
         }
+
         public List<UserModel> ObtenirTousLesUtilisateurs()
         {
             var users = _users.Find(t => true).ToList();
@@ -76,15 +78,16 @@ namespace Automate.Utils
             }
         }
 
-    public virtual void SupprimerTache(TacheModel tache)
-    {
-        _taches.DeleteOne(t => t.Id == tache.Id);
-    }
+        public virtual void SupprimerTache(TacheModel tache)
+        {
+            _taches.DeleteOne(t => t.Id == tache.Id);
+        }
 
-    public virtual List<TacheModel> FiltrerTachesParDate(DateTime dateSelectionnee)
-    {
-        var filtre = Builders<TacheModel>.Filter.Eq(t => t.DateDebut, dateSelectionnee);
-        var tachesFiltrees = _taches.Find(filtre).ToList();
-        return tachesFiltrees;
+        public virtual List<TacheModel> FiltrerTachesParDate(DateTime dateSelectionnee)
+        {
+            var filtre = Builders<TacheModel>.Filter.Eq(t => t.DateDebut, dateSelectionnee);
+            var tachesFiltrees = _taches.Find(filtre).ToList();
+            return tachesFiltrees;
+        }
     }
 }
