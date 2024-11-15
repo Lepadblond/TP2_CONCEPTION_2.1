@@ -20,7 +20,7 @@ namespace Automate.Models
         public ObjectId Id { get; set; }
 
         [BsonElement("IdEmployeAffecte")]
-        public string? IdEmployeAffecte { get; set; }
+        public ObjectId? IdEmployeAffecte { get; set; }
 
         [BsonElement("Titre")]
         public string? Titre { get; set; }

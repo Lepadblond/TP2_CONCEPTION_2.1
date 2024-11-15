@@ -33,6 +33,11 @@ namespace Automate.Utils
             var user = _users.Find(u => u.Username == username && u.Password == password).FirstOrDefault();
             return user;
         }
+        public List<UserModel> ObtenirTousLesUtilisateurs()
+        {
+            var users = _users.Find(t => true).ToList();
+            return users;
+        }
 
         public List<TacheModel> ObtenirToutesLesTaches()
         {

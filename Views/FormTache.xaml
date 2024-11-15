@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Automate.Views"
         mc:Ignorable="d"
         xmlns:viewmodels="clr-namespace:Automate.ViewModels" 
-        Title="FormTache" Height="500" Width="350">
+        Title="FormTache" Height="530" Width="350">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -38,6 +38,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Titre" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -59,36 +60,46 @@
                          Text="{Binding Description}" 
                          IsReadOnly="{Binding TexteNonModifiable}"/>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Date de départ" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Employé" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ComboBox x:Name="cboEmploye" 
+                          Grid.Row="2" Grid.Column="2" Width="200" 
+                          HorizontalAlignment="Center" 
+                          Margin="0, 0, 0, 10"  
+                          ItemsSource="{Binding Utilisateurs}" 
+                          DisplayMemberPath="Username"
+                          SelectedItem="{Binding UtilisateurSelectionne}" 
+                          IsEnabled="{Binding BoiteModifiable}"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Date de départ" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <DatePicker x:Name="dpDateDebut" 
-                            Grid.Row="2" Grid.Column="2" 
+                            Grid.Row="3" Grid.Column="2" 
                             HorizontalAlignment="Center" 
                             Margin="0, 0, 0, 10" 
                             Width="200" 
                             SelectedDate="{Binding DateDebut}" 
                             IsEnabled="{Binding BoiteModifiable}" />
 
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Date de fin" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Date de fin" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <DatePicker x:Name="dpDateFin" 
-                            Grid.Row="3" Grid.Column="2" 
+                            Grid.Row="4" Grid.Column="2" 
                             HorizontalAlignment="Center" 
                             Margin="0, 0, 0, 10" 
                             Width="200" 
                             SelectedDate="{Binding DateFin}" 
                             IsEnabled="{Binding BoiteModifiable}" />
 
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Type" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Type" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <ComboBox x:Name="cboType" 
-                          Grid.Row="4" Grid.Column="2" Width="200" 
+                          Grid.Row="5" Grid.Column="2" Width="200" 
                           HorizontalAlignment="Center" 
                           Margin="0, 0, 0, 10"  
                           ItemsSource="{Binding TaskTypes}" 
                           SelectedItem="{Binding Type}" 
                           IsEnabled="{Binding BoiteModifiable}"/>
 
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="Statut" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="Statut" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <ComboBox x:Name="cboStatus" 
-                          Grid.Row="5" Grid.Column="2" Width="200" 
+                          Grid.Row="6" Grid.Column="2" Width="200" 
                           HorizontalAlignment="Center" 
                           Margin="0, 0, 0, 10" 
                           ItemsSource="{Binding TaskStatuses}" 

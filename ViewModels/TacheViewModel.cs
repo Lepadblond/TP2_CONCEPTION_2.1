@@ -16,6 +16,7 @@ namespace Automate.ViewModels
     {
         private string _titre;
         private string _description;
+        private UserModel _utilisateurSelectionne;
         private DateTime _dateDebut;
         private DateTime _dateFin;
         private TaskType _type;
@@ -42,6 +43,16 @@ namespace Automate.ViewModels
             {
                 _description = value;
                 OnPropertyChanged(nameof(Description));
+            }
+        }
+
+        public UserModel UtilisateurSelectionne
+        {
+            get => _utilisateurSelectionne;
+            set
+            {
+                _utilisateurSelectionne = value;
+                OnPropertyChanged(nameof(UtilisateurSelectionne));
             }
         }
 
@@ -145,8 +156,12 @@ namespace Automate.ViewModels
 
         private readonly MongoDBService _mongoService;
 
+        public List<UserModel> Utilisateurs { get; set; }
+
         public TacheViewModel(TacheModel pTache = null, EtatFormulaire pEtat = EtatFormulaire.Ajouter)
         {
+
+            _mongoService = new MongoDBService("AutomateDB");
             Tache = pTache;
             Etat = pEtat;
             InitialiserFormulaire();
@@ -154,6 +169,7 @@ namespace Automate.ViewModels
 
         private void InitialiserFormulaire()
         {
+            Utilisateurs = _mongoService.ObtenirTousLesUtilisateurs().OrderBy(u => u.Username).ToList(); ;
 
             TaskTypes = System.Enum.GetValues(typeof(TaskType)).Cast<TaskType>().ToList();
             TaskStatuses = System.Enum.GetValues(typeof(Enum.TaskStatus)).Cast<Enum.TaskStatus>().ToList();
@@ -181,6 +197,11 @@ namespace Automate.ViewModels
                 DateFin = Tache.DateFin ?? DateTime.Now;
                 Type = Tache.Type;
                 Status = Tache.Status;
+
+                if (Tache.IdEmployeAffecte.HasValue)
+                {
+                    UtilisateurSelectionne = Utilisateurs.FirstOrDefault(u => u.Id == Tache.IdEmployeAffecte.Value);
+                }
 
                 if (Etat == EtatFormulaire.Modifier)
                 {
@@ -226,11 +247,11 @@ namespace Automate.ViewModels
                     {
                         try
                         {
-                            // TODO : ID EMPLOYÉ
                             var nouvelleTache = new TacheModel
                             {
                                 Titre = Titre,
                                 Description = Description,
+                                IdEmployeAffecte = UtilisateurSelectionne.Id,
                                 DateDebut = DateDebut,
                                 DateFin = DateFin,
                                 Type = Type,
@@ -265,6 +286,7 @@ namespace Automate.ViewModels
                             {
                                 Tache.Titre = Titre;
                                 Tache.Description = Description;
+                                Tache.IdEmployeAffecte = UtilisateurSelectionne.Id;
                                 Tache.DateDebut = DateDebut;
                                 Tache.DateFin = DateFin;
                                 Tache.Type = Type;
@@ -331,10 +353,22 @@ namespace Automate.ViewModels
                     msgErreur += "- Le champ 'Description' ne doit pas être vide.\n";
                 }
 
+                if (UtilisateurSelectionne == null)
+                {
+                    msgErreur += "- Le champ 'Employé' doit être sélectionné.\n";
+                }
+
                 if (DateDebut == null)
                 {
-                    msgErreur += "- Le champ 'Date Début' doit être sélectionné.\n";
+                    msgErreur += "- Le champ 'Date de départ' doit être sélectionné.\n";
                 }
+
+                if (DateFin == null)
+                {
+                    msgErreur += "- Le champ 'Date de fin' doit être sélectionné.\n";
+                }
+
+                // Vérifer DateDebut < DateFin
 
                 if (Type == null)
                 {
