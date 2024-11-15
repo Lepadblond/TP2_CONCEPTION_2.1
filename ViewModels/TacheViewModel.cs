@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using Automate.Utils;
+using System.Data;
 
 namespace Automate.ViewModels
 {
@@ -143,17 +144,26 @@ namespace Automate.ViewModels
                 DateFin = DateTime.Now;
                 Type = TaskType.Semis;
                 Status = Enum.TaskStatus.AFaire;
+            } else
+            {
+                Titre = Tache.Titre ?? string.Empty;
+                Description = Tache.Description ?? string.Empty;
+                DateDebut = Tache.DateDebut ?? DateTime.Now;
+                DateFin = Tache.DateFin ?? DateTime.Now;
+                Type = Tache.Type;
+                Status = Tache.Status;
+
+                if (Etat == EtatFormulaire.Modifier)
+                {
+                    AjouterModifierSupprimerButtonText = "Modifier";
+                    TitreLabelText = "Modifier une tâche";
+                }
+                else
+                {
+                    AjouterModifierSupprimerButtonText = "Supprimer";
+                    TitreLabelText = "Supprimer une tâche";
+                }
             }
-            //else if (Etat == EtatFormulaire.Modifier)
-            //{
-            //    // Logique pour modifier la tâche
-            //    MessageBox.Show("Modifier la tâche !");
-            //}
-            //else if (Etat == EtatFormulaire.Supprimer)
-            //{
-            //    // Logique pour supprimer la tâche
-            //    MessageBox.Show("Supprimer la tâche !");
-            //}
 
             OnPropertyChanged(nameof(AjouterModifierSupprimerButtonText));
             OnPropertyChanged(nameof(TitreLabelText));
@@ -167,7 +177,7 @@ namespace Automate.ViewModels
                 MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment ajouter la tâche?", "Ajout d'une tâche", MessageBoxButton.YesNo);
                 if (confirmation == MessageBoxResult.Yes)
                 {
-                    if (ValiderTache())
+                    if (ValiderTache(Etat))
                     {
                         try
                         {
@@ -197,6 +207,36 @@ namespace Automate.ViewModels
                     }
                 }
             }
+            else
+            {
+                if (Etat == EtatFormulaire.Modifier)
+                {
+                    try
+                    {
+                        MessageBoxResult confirmation = MessageBox.Show("Voulez-vous vraiment modifier la tâche?", "Modification d'une tâche", MessageBoxButton.YesNo);
+                        if (confirmation == MessageBoxResult.Yes)
+                        {
+
+                            if (ValiderTache(Etat))
+                            {
+                                Tache.Titre = Titre;
+                                Tache.Description = Description;
+                                Tache.DateDebut = DateDebut;
+                                Tache.DateFin = DateFin;
+                                Tache.Type = Type;
+                                Tache.Status = Status;
+                                Tache.DateDerniereModification = DateTime.Now;
+
+                                FermerFenetre(parameter, true);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+            }
         }
 
         private void Annuler(object parameter)
@@ -223,41 +263,59 @@ namespace Automate.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private bool ValiderTache()
+        private bool ValiderTache(EtatFormulaire pEtat)
         {
-            string msgErreur = "";
-
-            if (string.IsNullOrWhiteSpace(Titre))
+            try
             {
-                msgErreur += "- Le champ 'Nom' ne doit pas être vide.\n";
+                string msgErreur = "";
+
+                if (string.IsNullOrWhiteSpace(Titre))
+                {
+                    msgErreur += "- Le champ 'Nom' ne doit pas être vide.\n";
+                }
+
+                if (string.IsNullOrWhiteSpace(Description))
+                {
+                    msgErreur += "- Le champ 'Description' ne doit pas être vide.\n";
+                }
+
+                if (DateDebut == null)
+                {
+                    msgErreur += "- Le champ 'Date Début' doit être sélectionné.\n";
+                }
+
+                if (Type == null)
+                {
+                    msgErreur += "- Le champ 'Type' doit être sélectionné.\n";
+                }
+
+                if (Status == null)
+                {
+                    msgErreur += "- Le champ 'Statut' doit être sélectionné.\n";
+                }
+
+                if (msgErreur == "")
+                {
+                    return true;
+                }
+                else
+                {
+                    if (pEtat == EtatFormulaire.Ajouter)
+                    {
+                        MessageBox.Show(msgErreur, "Ajout d'un produit");
+                    }
+                    else
+                    {
+                        MessageBox.Show(msgErreur, "Modification d'un produit");
+                    }
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            if (string.IsNullOrWhiteSpace(Description))
-            {
-                msgErreur += "- Le champ 'Description' ne doit pas être vide.\n";
-            }
-
-            if (DateDebut == null)
-            {
-                msgErreur += "- Le champ 'Date Début' doit être sélectionné.\n";
-            }
-
-            if (Type == null)
-            {
-                msgErreur += "- Le champ 'Type' doit être sélectionné.\n";
-            }
-
-            if (Status == null)
-            {
-                msgErreur += "- Le champ 'Statut' doit être sélectionné.\n";
-            }
-
-            if (!string.IsNullOrEmpty(msgErreur))
-            {
-                MessageBox.Show(msgErreur, "Erreur");
-                return false;
-            }
-            return true;
         }
     }
 }

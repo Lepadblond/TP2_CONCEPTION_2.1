@@ -141,46 +141,38 @@ namespace Automate.ViewModels
 
         private void ModifierUneTache()
         {
+            try
+            {
+                if (!estAdmin())
+                {
+                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
+                    return;
+                }
+                else
+                {
+                    if (TacheActuelle == null)
+                    {
+                        MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+                        return;
+                    }
+                    FormTache formTache = new FormTache(TacheActuelle, EtatFormulaire.Modifier);
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.ModifierTache(formTache.Tache.Id, formTache.Tache);
+                        ChargerTaches();
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été modifiée.");
+                    }
 
-            //try
-            //{
-            //    if (!estAdmin())
-            //    {
-            //        MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        if (TacheActuelle == null)
-            //        {
-            //            MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
-            //            return;
-            //        }
-            //        FormTache formTache = new FormTache(TacheActuelle);
-            //        if (formTache.ShowDialog() == true && formTache.Tache != null)
-            //        {
-            //            _mongoService.ModifierTache(formTache.Tache);
-            //            ChargerTaches();
-            //        }
-            //        else
-            //        {
-            //            MessageBox.Show("La tâche n'a pas été modifiée.");
-            //        }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
 
-            //    }
-
-
-         
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
-
-            //}
-
-
-
+            }
         }
 
         private void FiltrerTachesParDate()
