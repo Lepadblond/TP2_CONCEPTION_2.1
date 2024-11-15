@@ -1,3 +1,7 @@
+using Automate.Enum;
+using Automate.Models;
+using Automate.Utils;
+using Automate.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,28 +33,21 @@ public class AccueilViewModel : INotifyPropertyChanged
             UtilisateurConnecte = utilisateurConnecte;
             ChargerTaches();
 
-
-            AjouterTacheCommand = new RelayCommand(param => AjouterTache());
-            ModifierUneTacheCommand = new RelayCommand(param => ModifierUneTache());
+                AjouterTacheCommand = new RelayCommand(param => AjouterTache());
+                ModifierUneTacheCommand = new RelayCommand(param => ModifierUneTache());
+                SupprimerTacheCommand = new RelayCommand(param => SupprimerUneTache());
+            }
         }
-    }
-
-    public AccueilViewModel(MongoDBService mongoDBService, UserModel user)
-    {
-        _mongoService = mongoDBService;
-        _utilisateurConnecte = user;
-    }
-
-    // Propriétés
-    public ObservableCollection<TacheModel> ObservableCollectionDeTaches
-    {
-        get => _observableCollectionDeTaches;
-        set
+        // Propriétés
+        public ObservableCollection<TacheModel> ObservableCollectionDeTaches
         {
-            _observableCollectionDeTaches = value;
-            OnPropertyChanged();
+            get => _observableCollectionDeTaches;
+            set
+            {
+                _observableCollectionDeTaches = value;
+                OnPropertyChanged();
+            }
         }
-    }
 
     public UserModel UtilisateurConnecte
     {
@@ -83,131 +80,151 @@ public class AccueilViewModel : INotifyPropertyChanged
         }
     }
 
-    public ICommand AjouterTacheCommand { get; }
-    public ICommand ModifierUneTacheCommand { get; }
+        // Commandes
+        public ICommand AjouterTacheCommand { get; }
+        public ICommand ModifierUneTacheCommand { get; }
+        public ICommand SupprimerTacheCommand { get; }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-
-    /// <summary>
-    /// Charge les tâches depuis la base de données
-    /// </summary>
-    private void ChargerTaches()
-    {
-        try
+        // Méthodes
+        private void ChargerTaches()
         {
-            _taches = _mongoService.ObtenirToutLesTaches();
-            if (_taches == null || _taches.Count == 0)
+            try
             {
-                MessageBox.Show("Aucune tâche n'a été trouvée.");
-                return;
-            }
-
-            ObservableCollectionDeTaches = new ObservableCollection<TacheModel>(_taches);
-
-            _tacheActuelle = _taches[0];
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Erreur lors de la récupération des tâches : {ex.Message}");
-        }
-    }
-
-
-    /// <summary>
-    /// Permet d'ajouter une tâche
-    /// </summary>
-    private void AjouterTache()
-    {
-        try
-        {
-            if (!estAdmin())
-            {
-                MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
-            }
-            else
-            {
-                var formTache = new FormTache();
-                if (formTache.ShowDialog() == true && formTache.Tache != null)
+                _taches = _mongoService.ObtenirToutesLesTaches();
+                if (_taches == null || _taches.Count == 0)
                 {
-                    _mongoService.AjouterTache(formTache.Tache);
-                    ObservableCollectionDeTaches.Add(formTache.Tache);
-                }
-                else
-                {
-                    MessageBox.Show("La tâche n'a pas été ajoutée.");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Erreur lors de la récupération des tâches : {ex.Message}");
-        }
-    }
-
-
-    /// <summary>
-    /// Permet de modifier une tâche
-    /// </summary>
-    private void ModifierUneTache()
-    {
-        try
-        {
-            if (!estAdmin())
-            {
-                MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
-            }
-            else
-            {
-                if (TacheActuelle == null)
-                {
-                    MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+                    MessageBox.Show("Aucune tâche n'a été trouvée.");
                     return;
                 }
+                ObservableCollectionDeTaches = new ObservableCollection<TacheModel>(_taches);
 
-                var formTache = new FormTache(TacheActuelle);
-                if (formTache.ShowDialog() == true && formTache.Tache != null)
+                _tacheActuelle = _taches[0];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la récupération des tâches : {ex.Message}");
+            }
+        }
+        private void AjouterTache()
+        {
+
+            try
+            {
+
+                if (!estAdmin())
                 {
-                    _mongoService.ModifierTache(formTache.Tache);
-                    ChargerTaches();
+                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
+                    return;
                 }
                 else
                 {
-                    MessageBox.Show("La tâche n'a pas été modifiée.");
+                    FormTache formTache = new FormTache();
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.AjouterTache(formTache.Tache);
+                        ObservableCollectionDeTaches.Add(formTache.Tache);
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été ajoutée.");
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la récupération des tâches : {ex.Message}");
+            }
+
+
+        private void ModifierUneTache()
+        {
+            try
+            {
+                if (!estAdmin())
+                {
+                    MessageBox.Show("Vous n'avez pas les droits pour modifier une tâche.");
+                    return;
+                }
+                else
+                {
+                    if (TacheActuelle == null)
+                    {
+                        MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+                        return;
+                    }
+                    FormTache formTache = new FormTache(TacheActuelle, EtatFormulaire.Modifier);
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.ModifierTache(formTache.Tache.Id, formTache.Tache);
+                        ChargerTaches();
+
+                        MessageBox.Show("Tâche modifiée avec succès.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été modifiée.");
+                    }
+
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
+
+            }
         }
-        catch (Exception ex)
+
+        private void SupprimerUneTache()
         {
-            MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
+            try
+            {
+                if (!estAdmin())
+                {
+                    MessageBox.Show("Vous n'avez pas les droits pour supprimer une tâche.");
+                    return;
+                }
+                else
+                {
+                    if (TacheActuelle == null)
+                    {
+                        MessageBox.Show("Veuillez sélectionner une tâche à supprimer.");
+                        return;
+                    }
+                    FormTache formTache = new FormTache(TacheActuelle, EtatFormulaire.Supprimer);
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.SupprimerTache(formTache.Tache);
+                        ChargerTaches();
+
+                        MessageBox.Show("Tâche supprimée avec succès.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été supprimée.");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la suppression de la tâches : {ex.Message}");
+
+            }
         }
-    }
-
-
-    /// <summary>
-    /// Permet de supprimer une tâche
-    /// </summary>
-    private void SupprimerUneTache()
-    {
-    }
-
-
-
-    /// <summary>
-    /// Permet de filtrer les tâches par date
-    /// </summary>
-    private void FiltrerTachesParDate()
-    {
-        if (DateSelectionnee.HasValue)
+        private void FiltrerTachesParDate()
         {
-            var tachesFiltrees = _mongoService.FiltrerTachesParDate(DateSelectionnee.Value);
-            ObservableCollectionDeTaches = new ObservableCollection<TacheModel>(tachesFiltrees);
+            if (DateSelectionnee.HasValue)
+            {
+                var tachesFiltrees = _mongoService.FiltrerTachesParDate(DateSelectionnee.Value);
+                ObservableCollectionDeTaches = new ObservableCollection<TacheModel>(tachesFiltrees);
+            }
+            else
+            {
+                ObservableCollectionDeTaches = new ObservableCollection<TacheModel>(_taches);
+            }
         }
-        else
-        {
-            ObservableCollectionDeTaches = new ObservableCollection<TacheModel>(_taches);
-        }
-    }
 
     /// <summary>
     /// Permet de savoir si l'utilisateur connecté est un admin
