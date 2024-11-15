@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\girar\\Desktop\\AutomateTests\\AutomateTests.csproj": {}
+    "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\AutomateTests\\AutomateTests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\girar\\Desktop\\AutomateTests\\AutomateTests.csproj": {
+    "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\AutomateTests\\AutomateTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\girar\\Desktop\\AutomateTests\\AutomateTests.csproj",
+        "projectUniqueName": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\AutomateTests\\AutomateTests.csproj",
         "projectName": "AutomateTests",
-        "projectPath": "C:\\Users\\girar\\Desktop\\AutomateTests\\AutomateTests.csproj",
-        "packagesPath": "C:\\Users\\girar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\girar\\Desktop\\AutomateTests\\obj\\",
+        "projectPath": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\AutomateTests\\AutomateTests.csproj",
+        "packagesPath": "C:\\Users\\jmenc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\AutomateTests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\girar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jmenc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,8 +28,8 @@
           "net6.0-windows7.0": {
             "targetAlias": "net6.0-windows",
             "projectReferences": {
-              "C:\\Users\\girar\\Desktop\\TP2_CONCEPTION_2.1\\Automate.csproj": {
-                "projectPath": "C:\\Users\\girar\\Desktop\\TP2_CONCEPTION_2.1\\Automate.csproj"
+              "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\Automate\\Automate.csproj": {
+                "projectPath": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\Automate\\Automate.csproj"
               }
             }
           }
@@ -38,11 +38,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -86,21 +81,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\girar\\Desktop\\TP2_CONCEPTION_2.1\\Automate.csproj": {
+    "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\Automate\\Automate.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\girar\\Desktop\\TP2_CONCEPTION_2.1\\Automate.csproj",
+        "projectUniqueName": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\Automate\\Automate.csproj",
         "projectName": "Automate",
-        "projectPath": "C:\\Users\\girar\\Desktop\\TP2_CONCEPTION_2.1\\Automate.csproj",
-        "packagesPath": "C:\\Users\\girar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\girar\\Desktop\\TP2_CONCEPTION_2.1\\obj\\",
+        "projectPath": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\Automate\\Automate.csproj",
+        "packagesPath": "C:\\Users\\jmenc\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jmenc\\Desktop\\School\\Automne2024\\Conception\\TP2\\TP2_CONCEPTION_2.1\\Automate\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\girar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jmenc\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -120,11 +115,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -171,7 +161,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -959,10 +959,7 @@
           "Moq": "4.20.72"
         },
         "runtime": {
-          "Automate.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "Automate.dll": {}
         }
       },
       "Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions/14.0.0.0": {
