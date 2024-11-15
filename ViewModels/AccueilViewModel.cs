@@ -1,3 +1,4 @@
+using Automate.Enum;
 using Automate.Models;
 using Automate.Utils;
 using Automate.Views;
@@ -34,6 +35,7 @@ namespace Automate.ViewModels
 
                 AjouterTacheCommand = new RelayCommand(param => AjouterTache());
                 ModifierUneTacheCommand = new RelayCommand(param => ModifierUneTache());
+                SupprimerTacheCommand = new RelayCommand(param => SupprimerUneTache());
             }
         }
         // Propriétés
@@ -81,13 +83,14 @@ namespace Automate.ViewModels
         // Commandes
         public ICommand AjouterTacheCommand { get; }
         public ICommand ModifierUneTacheCommand { get; }
+        public ICommand SupprimerTacheCommand { get; }
 
         // Méthodes
         private void ChargerTaches()
         {
             try
             {
-                _taches = _mongoService.ObtenirToutLesTaches();
+                _taches = _mongoService.ObtenirToutesLesTaches();
                 if (_taches == null || _taches.Count == 0)
                 {
                     MessageBox.Show("Aucune tâche n'a été trouvée.");
@@ -104,10 +107,8 @@ namespace Automate.ViewModels
         }
         private void AjouterTache()
         {
-
             try
             {
-
                 if (!estAdmin())
                 {
                     MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
@@ -116,10 +117,16 @@ namespace Automate.ViewModels
                 else
                 {
                     FormTache formTache = new FormTache();
-                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+
+                    if (formTache.ShowDialog() == true && formTache != null)
                     {
+
+                        TacheModel tacheAjoutee = formTache.Tache;
+
                         _mongoService.AjouterTache(formTache.Tache);
                         ObservableCollectionDeTaches.Add(formTache.Tache);
+
+                        MessageBox.Show("Tâche ajoutée avec succès.");
                     }
                     else
                     {
@@ -142,7 +149,7 @@ namespace Automate.ViewModels
             {
                 if (!estAdmin())
                 {
-                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
+                    MessageBox.Show("Vous n'avez pas les droits pour modifier une tâche.");
                     return;
                 }
                 else
@@ -152,11 +159,13 @@ namespace Automate.ViewModels
                         MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
                         return;
                     }
-                    FormTache formTache = new FormTache(TacheActuelle);
+                    FormTache formTache = new FormTache(TacheActuelle, EtatFormulaire.Modifier);
                     if (formTache.ShowDialog() == true && formTache.Tache != null)
                     {
-                        _mongoService.ModifierTache(formTache.Tache);
+                        _mongoService.ModifierTache(formTache.Tache.Id, formTache.Tache);
                         ChargerTaches();
+
+                        MessageBox.Show("Tâche modifiée avec succès.");
                     }
                     else
                     {
@@ -164,24 +173,50 @@ namespace Automate.ViewModels
                     }
 
                 }
-
-
-
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
 
             }
-
-
-
         }
 
         private void SupprimerUneTache()
         {
+            try
+            {
+                if (!estAdmin())
+                {
+                    MessageBox.Show("Vous n'avez pas les droits pour supprimer une tâche.");
+                    return;
+                }
+                else
+                {
+                    if (TacheActuelle == null)
+                    {
+                        MessageBox.Show("Veuillez sélectionner une tâche à supprimer.");
+                        return;
+                    }
+                    FormTache formTache = new FormTache(TacheActuelle, EtatFormulaire.Supprimer);
+                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+                    {
+                        _mongoService.SupprimerTache(formTache.Tache);
+                        ChargerTaches();
 
+                        MessageBox.Show("Tâche supprimée avec succès.");
+                    }
+                    else
+                    {
+                        MessageBox.Show("La tâche n'a pas été supprimée.");
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la suppression de la tâches : {ex.Message}");
+
+            }
         }
         private void FiltrerTachesParDate()
         {
