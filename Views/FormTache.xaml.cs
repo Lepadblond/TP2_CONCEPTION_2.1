@@ -1,15 +1,11 @@
-﻿using Automate.Models;
-using Automate.Utils;
-using Automate.Enum;  // Assure-toi d'utiliser cet espace de noms
+﻿using Automate.Enum;  // Assure-toi d'utiliser cet espace de noms
+using Automate.Models;
+using MongoDB.Driver;
 using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-using MongoDB.Driver;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
-using System.Collections.Generic;
-using System.Windows.Media.Imaging;
 
 namespace Automate.Views
 {
@@ -37,7 +33,7 @@ namespace Automate.Views
         public FormTache(TacheModel pTache = null, EtatFormulaire pEtat = EtatFormulaire.Ajouter)
         {
             InitializeComponent();
-            Tache = pTache ?? new TacheModel();  
+            Tache = pTache ?? new TacheModel();
             Etat = pEtat;
             InitialiserFormulaire();
         }

@@ -3,8 +3,6 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Automate.Utils
 {
@@ -38,21 +36,21 @@ namespace Automate.Utils
             return taches;
         }
 
-        public void AjouterTache(TacheModel tache)
+        public virtual void AjouterTache(TacheModel tache)
         {
             _taches.InsertOne(tache);
         }
 
-        public void ModifierTache(TacheModel tache)
+        public virtual void ModifierTache(TacheModel tache)
         {
             _taches.ReplaceOne(t => t.Id == tache.Id, tache);
         }
 
-        public void SupprimerTache(TacheModel tache)
+        public virtual void SupprimerTache(TacheModel tache)
         {
             _taches.DeleteOne(t => t.Id == tache.Id);
         }
-        public List<TacheModel> FiltrerTachesParDate(DateTime dateSelectionnee)
+        public virtual List<TacheModel> FiltrerTachesParDate(DateTime dateSelectionnee)
         {
             var filtre = Builders<TacheModel>.Filter.Eq(t => t.DateDebut, dateSelectionnee);
             var tachesFiltrees = _taches.Find(filtre).ToList();

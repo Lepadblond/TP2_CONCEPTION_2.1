@@ -107,13 +107,14 @@ namespace Automate.ViewModels
 
             try
             {
-                
-                if(!estAdmin())
+
+                if (!estAdmin())
                 {
                     MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
                     return;
                 }
-                else {
+                else
+                {
                     FormTache formTache = new FormTache();
                     if (formTache.ShowDialog() == true && formTache.Tache != null)
                     {
@@ -126,7 +127,7 @@ namespace Automate.ViewModels
                     }
                 }
 
-          
+
             }
             catch (Exception ex)
             {
@@ -165,7 +166,7 @@ namespace Automate.ViewModels
                 }
 
 
-         
+
 
             }
             catch (Exception ex)
@@ -178,6 +179,10 @@ namespace Automate.ViewModels
 
         }
 
+        private void SupprimerUneTache()
+        {
+
+        }
         private void FiltrerTachesParDate()
         {
             if (DateSelectionnee.HasValue)
