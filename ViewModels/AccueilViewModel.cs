@@ -125,6 +125,8 @@ namespace Automate.ViewModels
 
                         _mongoService.AjouterTache(formTache.Tache);
                         ObservableCollectionDeTaches.Add(formTache.Tache);
+
+                        MessageBox.Show("Tâche ajoutée avec succès.");
                     }
                     else
                     {
@@ -162,6 +164,8 @@ namespace Automate.ViewModels
                     {
                         _mongoService.ModifierTache(formTache.Tache.Id, formTache.Tache);
                         ChargerTaches();
+
+                        MessageBox.Show("Tâche modifiée avec succès.");
                     }
                     else
                     {
@@ -198,6 +202,8 @@ namespace Automate.ViewModels
                     {
                         _mongoService.SupprimerTache(formTache.Tache);
                         ChargerTaches();
+
+                        MessageBox.Show("Tâche supprimée avec succès.");
                     }
                     else
                     {

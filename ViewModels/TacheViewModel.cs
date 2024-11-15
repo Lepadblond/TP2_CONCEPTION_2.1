@@ -262,8 +262,6 @@ namespace Automate.ViewModels
 
                             Tache = nouvelleTache;
 
-                            MessageBox.Show("Tâche ajoutée avec succès.");
-
                             FermerFenetre(parameter, true);
                         }
                         catch (Exception ex)
