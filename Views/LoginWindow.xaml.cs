@@ -15,13 +15,12 @@ namespace Automate
             DataContext = new LoginViewModel(this);
         }
 
-        //pas le choix d'utiliser un événement, on ne peut pas BIND un password pour des raisons de sécurité
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             PasswordBox? passwordBox = sender as PasswordBox;
             if (DataContext is LoginViewModel viewModel)
             {
-                viewModel.Password = passwordBox.Password; // Met à jour la propriété Password dans le ViewModel
+                viewModel.Password = passwordBox.Password;
             }
         }
     }
