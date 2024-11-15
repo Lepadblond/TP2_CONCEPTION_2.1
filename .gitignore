@@ -398,3 +398,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+/AutomateTests/bin/debug/net6.0-windows/*.dll
+/AutomateTests/bin/debug/net6.0-windows/*.pdb
+/AutomateTests/obj/debug/net6.0-windows/*.dll
+/AutomateTests/obj/debug/net6.0-windows/*.pdb
+/AutomateTests/obj/debug/net6.0-windows/ref/*.dll
+/AutomateTests/obj/debug/net6.0-windows/refint/*.dll
+/AutomateTests/obj/debug/net6.0-windows/*.AssemblyReference.cache
