@@ -14,6 +14,7 @@ namespace Automate.Interfaces
         IMongoCollection<T> GetCollection<T>(string collectionName);
         void ModifierTache(ObjectId id, TacheModel tacheModifiee);
         TacheModel ObtenirTacheParId(ObjectId id);
+        List<UserModel> ObtenirTousLesUtilisateurs();
         List<TacheModel> ObtenirToutesLesTaches();
         void SupprimerTache(TacheModel tache);
     }

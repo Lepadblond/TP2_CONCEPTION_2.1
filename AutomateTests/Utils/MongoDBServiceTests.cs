@@ -18,18 +18,35 @@ namespace Automate.Utils.Tests
     public class MongoDBServiceTests
     {
         private Mock<IMongoDBService> _mockMongoDBService;
+        private List<UserModel> _listeUtilisateursTest;
         private List<TacheModel> _listeTachesTest;
         private TacheModel _tacheAjouterTest;
 
         [TestInitialize]
         public void Setup()
         {
+            // Arrange
             _mockMongoDBService = new Mock<IMongoDBService>();
 
             var userId1 = ObjectId.GenerateNewId();
             var userId2 = ObjectId.GenerateNewId();
 
-            // Arrange
+            _listeUtilisateursTest = new List<UserModel>
+            {
+                new UserModel
+                {
+                    Id = userId1,
+                    Username = "user1",
+                    Password = "password1"
+                },
+                new UserModel
+                {
+                    Id = userId2,
+                    Username = "user2",
+                    Password = "password2"
+                }
+            };
+
             _listeTachesTest = new List<TacheModel>
             {
                 new TacheModel
@@ -58,8 +75,21 @@ namespace Automate.Utils.Tests
                 }
             };
 
+            _mockMongoDBService.Setup(service => service.ObtenirTousLesUtilisateurs()).Returns(_listeUtilisateursTest);
             _mockMongoDBService.Setup(service => service.ObtenirToutesLesTaches()).Returns(_listeTachesTest);
 
+            _mockMongoDBService.Setup(service => service.Authenticate(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((string username, string password) =>
+                {
+                    var user = _listeUtilisateursTest.FirstOrDefault(u => u.Username == username);
+
+                    if (user != null && user.Password == password)
+                    {
+                        return user;
+                    }
+
+                    return null;
+                });
 
             _tacheAjouterTest = new TacheModel
             {
@@ -73,6 +103,29 @@ namespace Automate.Utils.Tests
                 DateAjout = DateTime.Now.AddDays(-2),
                 DateDerniereModification = DateTime.Now.AddDays(-1)
             };
+        }
+
+
+        [TestMethod()]
+        public void ObtenirTousLesUtilisateurs_Retourne_Tous_Les_Utilisateurs()
+        {
+            // Act
+            var listeUtilisateursRecuperee = _mockMongoDBService.Object.ObtenirTousLesUtilisateurs();
+
+            // Assert
+            Assert.AreEqual(_listeUtilisateursTest.Count, listeUtilisateursRecuperee.Count, "Le nombre d'utilisateurs retournées n'est pas correct.");
+
+        }
+
+        [TestMethod()]
+        public void ObtenirTousLesUtilisateurs_Retourne_Pas_Null()
+        {
+            // Act
+            var listeUtilisateursRecuperee = _mockMongoDBService.Object.ObtenirTousLesUtilisateurs();
+
+            // Assert
+            Assert.IsNotNull(listeUtilisateursRecuperee, "La liste des utilisateurs ne devrait pas être nulle.");
+
         }
 
         [TestMethod()]
@@ -588,6 +641,27 @@ namespace Automate.Utils.Tests
                     t.DateDerniereModification == tacheModifiee.DateDerniereModification)), Times.Once);
         }
 
+        [TestMethod()]
+        public void SupprimerTache_Supprime_Tache_Dans_Liste()
+        {
+            // Arrange
+            var tacheASupprimer = _listeTachesTest.FirstOrDefault(t => t.Titre == "Test 1");
 
+            if (tacheASupprimer == null)
+            {
+                Assert.Fail("La tâche à supprimer n'a pas été trouvée dans la liste.");
+            }
+
+            // Act
+            _mockMongoDBService.Setup(service => service.SupprimerTache(It.Is<TacheModel>(t => t.Id == tacheASupprimer.Id)))
+                               .Callback<TacheModel>((tache) =>
+                               {
+                                   _listeTachesTest.RemoveAll(t => t.Id == tache.Id);
+                               });
+
+            _mockMongoDBService.Object.SupprimerTache(tacheASupprimer);
+
+            Assert.IsFalse(_listeTachesTest.Any(t => t.Id == tacheASupprimer.Id), "La tâche n'a pas été supprimée de la liste.");
+        }
     }
 }
