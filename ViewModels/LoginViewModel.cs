@@ -8,10 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Automate.ViewModels
@@ -118,12 +115,12 @@ namespace Automate.ViewModels
 
                     // Crée l'instance de WindowAccueil avec le ViewModel
                     var windowAccueil = new AccueilWindow(user);
-                
+
 
                     // Affiche la nouvelle fenêtre et ferme la fenêtre actuelle
                     windowAccueil.Show();
                     _window.Close();
-                        Trace.WriteLine("logged in");
+                    Trace.WriteLine("logged in");
                 }
             }
         }
@@ -165,7 +162,7 @@ namespace Automate.ViewModels
             if (!_errors[propertyName].Contains(errorMessage))
             {
                 _errors[propertyName].Add(errorMessage);
-               ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             }
             // Notifier les changements des propriétés
             OnPropertyChanged(nameof(ErrorMessages));
@@ -177,7 +174,7 @@ namespace Automate.ViewModels
             if (_errors.ContainsKey(propertyName))
             {
                 _errors.Remove(propertyName);
-               ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName)); 
+                ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
             }
             // Notifier les changements des propriétés
             OnPropertyChanged(nameof(ErrorMessages));
