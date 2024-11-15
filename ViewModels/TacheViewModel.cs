@@ -368,7 +368,10 @@ namespace Automate.ViewModels
                     msgErreur += "- Le champ 'Date de fin' doit être sélectionné.\n";
                 }
 
-                // Vérifer DateDebut < DateFin
+                if (DateDebut > DateFin)
+                {
+                    msgErreur += "- La 'Date de départ' ne peut pas être après la 'Date de fin'.\n";
+                }
 
                 if (Type == null)
                 {
