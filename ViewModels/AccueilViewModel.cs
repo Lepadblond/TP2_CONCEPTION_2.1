@@ -1,3 +1,4 @@
+using Automate.Enum;
 using Automate.Models;
 using Automate.Utils;
 using Automate.Views;
@@ -104,19 +105,22 @@ namespace Automate.ViewModels
         }
         private void AjouterTache()
         {
-
             try
             {
-                
-                if(!estAdmin())
+                if (!estAdmin())
                 {
                     MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
                     return;
                 }
-                else {
+                else
+                {
                     FormTache formTache = new FormTache();
-                    if (formTache.ShowDialog() == true && formTache.Tache != null)
+
+                    if (formTache.ShowDialog() == true && formTache != null)
                     {
+
+                        TacheModel tacheAjoutee = formTache.Tache;
+
                         _mongoService.AjouterTache(formTache.Tache);
                         ObservableCollectionDeTaches.Add(formTache.Tache);
                     }
@@ -126,7 +130,7 @@ namespace Automate.ViewModels
                     }
                 }
 
-          
+
             }
             catch (Exception ex)
             {
@@ -137,42 +141,43 @@ namespace Automate.ViewModels
 
         private void ModifierUneTache()
         {
-            try
-            {
-                if (!estAdmin())
-                {
-                    MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
-                    return;
-                }
-                else
-                {
-                    if (TacheActuelle == null)
-                    {
-                        MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
-                        return;
-                    }
-                    FormTache formTache = new FormTache(TacheActuelle);
-                    if (formTache.ShowDialog() == true && formTache.Tache != null)
-                    {
-                        _mongoService.ModifierTache(formTache.Tache);
-                        ChargerTaches();
-                    }
-                    else
-                    {
-                        MessageBox.Show("La tâche n'a pas été modifiée.");
-                    }
 
-                }
+            //try
+            //{
+            //    if (!estAdmin())
+            //    {
+            //        MessageBox.Show("Vous n'avez pas les droits pour ajouter une tâche.");
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        if (TacheActuelle == null)
+            //        {
+            //            MessageBox.Show("Veuillez sélectionner une tâche à modifier.");
+            //            return;
+            //        }
+            //        FormTache formTache = new FormTache(TacheActuelle);
+            //        if (formTache.ShowDialog() == true && formTache.Tache != null)
+            //        {
+            //            _mongoService.ModifierTache(formTache.Tache);
+            //            ChargerTaches();
+            //        }
+            //        else
+            //        {
+            //            MessageBox.Show("La tâche n'a pas été modifiée.");
+            //        }
+
+            //    }
 
 
          
 
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show($"Erreur lors de la modification de la tâches : {ex.Message}");
 
-            }
+            //}
 
 
 
