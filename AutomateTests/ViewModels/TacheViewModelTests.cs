@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Automate.Enum;
+using Automate.Models;
+using MongoDB.Bson;
 
 namespace Automate.ViewModels.Tests
 {
@@ -78,6 +80,55 @@ namespace Automate.ViewModels.Tests
         public void Champs_Status_Affiche_AFaire_Lorsque_EtatFormulaire_Ajouter()
         {
             Assert.AreEqual(Enum.TaskStatus.AFaire, _viewModel.Status);
+        }
+
+        [TestMethod()]
+        public void ValiderTache_Retourne_True_Quand_Champs_Corrects()
+        {
+            _viewModel.Titre = "Test Tache";
+            _viewModel.Description = "Description valide";
+            _viewModel.UtilisateurSelectionne = new UserModel { Id = ObjectId.GenerateNewId() };
+            _viewModel.DateDebut = DateTime.Now;
+            _viewModel.DateFin = DateTime.Now.AddDays(1);
+            _viewModel.Type = TaskType.Semis;
+            _viewModel.Status = Enum.TaskStatus.AFaire;
+
+            var methode = typeof(TacheViewModel).GetMethod("ValiderTache", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(methode); 
+
+            var result = (bool)methode.Invoke(_viewModel, new object[] { EtatFormulaire.Ajouter });
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod()]
+        public void ValiderTache_Retourne_False_Quand_Champs_Vides()
+        {
+            var methode = typeof(TacheViewModel).GetMethod("ValiderTache", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(methode);
+
+            var resultat = (bool)methode.Invoke(_viewModel, new object[] { EtatFormulaire.Ajouter });
+
+            Assert.IsFalse(resultat);
+        }
+
+        [TestMethod()]
+        public void ValiderTache_Retourne_False_Quand_DateFin_Avant_DateDebut()
+        {
+            _viewModel.Titre = "test";
+            _viewModel.Description = "test";
+            _viewModel.UtilisateurSelectionne = new UserModel { Id = ObjectId.GenerateNewId() };
+            _viewModel.DateDebut = DateTime.Now.AddDays(1);
+            _viewModel.DateFin = DateTime.Now;
+            _viewModel.Type = TaskType.Semis;
+            _viewModel.Status = Enum.TaskStatus.EnCours;
+
+            var methode = typeof(TacheViewModel).GetMethod("ValiderTache", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Assert.IsNotNull(methode);
+
+            var resultat = (bool)methode.Invoke(_viewModel, new object[] { EtatFormulaire.Ajouter });
+
+            Assert.IsFalse(resultat);
         }
 
     }
